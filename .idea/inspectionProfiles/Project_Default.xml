@@ -1,0 +1,32 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="LossyEncoding" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="10">
+            <item index="0" class="java.lang.String" itemvalue="PySide6-Essentials" />
+            <item index="1" class="java.lang.String" itemvalue="PySide6" />
+            <item index="2" class="java.lang.String" itemvalue="PySide6-Addons" />
+            <item index="3" class="java.lang.String" itemvalue="Pillow" />
+            <item index="4" class="java.lang.String" itemvalue="zstandard" />
+            <item index="5" class="java.lang.String" itemvalue="wayback" />
+            <item index="6" class="java.lang.String" itemvalue="Werkzeug" />
+            <item index="7" class="java.lang.String" itemvalue="webdriver-manager" />
+            <item index="8" class="java.lang.String" itemvalue="discord.py-self" />
+            <item index="9" class="java.lang.String" itemvalue="discord.py" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="discord.file.File.__add__" />
+          <option value="list.decode" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
