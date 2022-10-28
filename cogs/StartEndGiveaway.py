@@ -1,8 +1,9 @@
 import datetime
+from multiprocessing import connection
 from discord import app_commands
 import aiosqlite, discord
 from discord.ext import commands
-from tasks import choosewinners
+from utilities import choosewinners, reroll
 
 
 async def convert(time):
@@ -76,7 +77,9 @@ class StartEndCommands(commands.Cog):
                     embed = discord.Embed(title="🎉 New Giveaway 🎉", description=f"""
 **Prize** : {prize}
 **Time Left** : {timestamp}
-**Hosted By** : {interaction.user.mention}""", colour=discord.Colour.random())
+**Hosted By** : {interaction.user.mention}""",
+                                          colour=discord.Colour.random(),
+                                          timestamp = datetime.datetime.now())
                     await interaction.response.send_message("Giveaway Started!", ephemeral = True)
                     message = await interaction.channel.send(embed=embed, view=JoinGiveaway())
                     await db.execute('insert into Giveaways values(?,?,?,?,?,?,?,?)',
@@ -106,14 +109,33 @@ This Giveaway Has Already Ended!"""))
                     else:
                         channel = interaction.client.get_channel(fetch[0][1])
                         if channel is not None:
+                            
                             embed = await choosewinners(db, messageid, fetch[0][6], fetch[0][4])
                             await interaction.response.send_message("Ended The Giveaway")
                             await channel.send(
                                embed = embed)
+                            msg = await channel.fetch_message(messageid)
+                            embed = msg.embeds[0]
+                            embed.description = description=f"""
+**Prize** : {fetch[0][4]}
+**Time Left** : Giveaway Has Ended at {datetime.datetime.now()}
+**Hosted By** : {interaction.user.mention}"""
+                            await msg.edit(embed=embed)
+                            await db.execute('UPDATE Giveaways SET HasEnded = ? WHERE messageid = ?', (True, messageid,))
+                            await db.commit()
                         else:
                             await interaction.response.send_message(
                                 "The channel that the giveaway was hosted in Does Not Exist anymore.", ephemeral=True)
 
-
+    @app_commands.command()
+    async def greroll(
+           self,
+           interaction : discord.Interaction,
+           messageid : str,
+           amount_of_winners : int = 1
+    ):
+      int(messageid)
+      async with aiosqlite.connect('GiveAwayDB.db') as db:
+          await interaction.response.send_message(embed = await reroll(db, messageid, amount_of_winners))
 async def setup(bot):
     await bot.add_cog(StartEndCommands(bot))

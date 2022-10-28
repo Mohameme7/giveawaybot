@@ -32,8 +32,10 @@ class Bot(commands.Bot):
 
 
 client = Bot()
-
-
+@client.command()
+async def synctree(ctx):
+    await ctx.send("Syncing..")
+    await client.tree.sync()
 
 if __name__ == "__main__":
  try:

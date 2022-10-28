@@ -1,20 +1,7 @@
 import datetime
-from discord.ext.tasks import loop; import aiosqlite, re, discord
+from discord.ext.tasks import loop; import aiosqlite, re
 from discord.ext import commands
-async def choosewinners(connection, messageid, amountofwinners, prize):
-    fetch = await (await connection.execute("SELECT userid FROM Participators WHERE msgid = ? ORDER BY RANDOM() LIMIT ?",
-                          (messageid, amountofwinners))).fetchall()
-    match len(fetch):
-        case 0:
-            return discord.Embed(title = "Giveaway Ended", description = "The giveaway "
-                                                       "has ended unfortunately no one participated, No Winners.")
-        case _:
-            listofwinners = []
-            for row in fetch:
-                listofwinners.append(f"<@{row[0]}>")
-            return discord.Embed(title="Giveaway Ended", description=f"""Congratulations 
-                                                              to the following members for winning {prize}:"""
-                                                              '\n'.join(listofwinners))
+from utilities import choosewinners
 @loop(seconds = 5)
 async def giveawaychecker(client : commands.Bot):
     async with aiosqlite.connect('GiveAwayDB.db') as db:
